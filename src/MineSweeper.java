@@ -52,7 +52,7 @@ public class MineSweeper implements ActionListener {
 
         textField = new JLabel();
         textField.setHorizontalAlignment(JLabel.CENTER);
-        textField.setFont(new Font("MV Boli",Font.BOLD,20));
+        textField.setFont(new Font("MV Boil",Font.BOLD,20));
         textField.setForeground(Color.blue);
         textField.setText(bombs+" Bombs");
 
@@ -102,7 +102,7 @@ public class MineSweeper implements ActionListener {
             for(int j = 0; j<buttons[0].length; j++){
                 buttons[i][j] = new JButton();
                 buttons[i][j].setFocusable(false);
-                buttons[i][j].setFont(new Font("MV Bloli",Font.BOLD,20));
+                buttons[i][j].setFont(new Font("MV Boil",Font.BOLD,20));
                 buttons[i][j].setText("");
                 buttons[i][j].addActionListener(this);
                 buttonPanel.add(buttons[i][j]);
@@ -156,8 +156,7 @@ public class MineSweeper implements ActionListener {
      public void check(int x, int y){
         gameOver = (solutions[x][y] == gridSize +1);
         if(!gameOver){
-            if(solutions[x][y] != 0)
-                buttons[x][y].setText(String.valueOf(solutions[x][y]));
+            buttons[x][y].setText(String.valueOf(solutions[x][y]));
             checkWinner();
         }
         else {
