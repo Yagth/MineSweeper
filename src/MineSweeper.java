@@ -18,6 +18,7 @@ public class MineSweeper implements ActionListener {
     int bombs;
     final int WIDTH = 570;
     final int HEIGHT = 570;
+    boolean gameOver;
 
     ArrayList<Integer> xBombPositions;
     ArrayList<Integer> yBombPositions;
@@ -29,8 +30,8 @@ public class MineSweeper implements ActionListener {
             System.out.println("Can't set the look and feel.");
         }
 
-        gridSize = 9;
-        bombs = 10;
+        gridSize = 5;
+        bombs = 5;
         xBombPositions = new ArrayList<>();
         yBombPositions = new ArrayList<>();
 
@@ -153,11 +154,52 @@ public class MineSweeper implements ActionListener {
      }
 
      public void check(int x, int y){
-        boolean gameOver = solutions[x][y] == gridSize;
+        gameOver = (solutions[x][y] == gridSize +1);
         if(!gameOver){
-            buttons[x][y].setText(String.valueOf(solutions[x][y]));
+            if(solutions[x][y] != 0)
+                buttons[x][y].setText(String.valueOf(solutions[x][y]));
+            checkWinner();
+        }
+        else {
+            gameOver(false);
         }
 
+     }
+     public void checkWinner(){
+        int buttonsLeft = 0;
+         for (JButton[] button : buttons) {
+             for (int j = 0; j < buttons[0].length; j++) {
+                 if (button[j].getText().equals("")) {
+                     buttonsLeft++;
+                 }
+             }
+         }
+            boolean won = (buttonsLeft == bombs);
+            gameOver(won);
+     }
+     public void gameOver(boolean won){
+        if(!won) {
+            textField.setForeground(Color.red);
+            textField.setText("Game over!");
+            for (int i = 0; i < buttons.length; i++) {
+                for (int j = 0; j < buttons[0].length; j++) {
+                    boolean isBomb = (solutions[i][j] == gridSize + 1);
+                    if (isBomb)
+                        buttons[i][j].setForeground(Color.red);
+                    buttons[i][j].setText(String.valueOf(solutions[i][j]));
+                    buttons[i][j].setEnabled(false);
+                }
+            }
+        }
+        else{
+            textField.setForeground(Color.green);
+            textField.setText("You won!");
+            for(JButton[] jbs: buttons){
+                for(JButton jb: jbs){
+                    jb.setEnabled(false);
+                }
+            }
+        }
      }
 
      public void displayBombMap(){
