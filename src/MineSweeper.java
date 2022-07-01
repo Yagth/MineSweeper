@@ -11,6 +11,7 @@ public class MineSweeper implements ActionListener {
     JPanel buttonPanel;
     JButton[][] buttons;
     int[][] solutions;
+    boolean[][] buttonsChecked;
     JLabel textField;
 
     Random random;
@@ -62,6 +63,9 @@ public class MineSweeper implements ActionListener {
 
         this.createButtons();
         this.getSolution();
+
+        buttonsChecked = new boolean[gridSize][gridSize];
+        this.initialiseCheckedArrayList();
 
         textPanel.add(textField);
         frame.setTitle("Mine Sweeper!");
@@ -155,9 +159,10 @@ public class MineSweeper implements ActionListener {
      }
 
      public void check(int x, int y){
+         initialiseCheckedArrayList();
          boolean isEmpty = (solutions[x][y] == 0);
-         System.out.println("Is empty: "+ isEmpty);
-        gameOver = (solutions[x][y] == gridSize +1);
+         gameOver = (solutions[x][y] == gridSize +1);
+
         if(!gameOver){
             buttons[x][y].setText(String.valueOf(solutions[x][y]));
             checkWinner();
@@ -216,22 +221,31 @@ public class MineSweeper implements ActionListener {
              System.out.println();
          }
      }
-     int recursiveCall = 0;
-     private void openConsecutiveZeros(int x, int y){
-         boolean isWithInBounds =(x<solutions.length && x>=0) && (y<solutions[0].length && y>=0);
-        if(isWithInBounds){
-            if(solutions[x][y] == 0){
-                buttons[x][y].setText(String.valueOf(solutions[x][y]));
-                openConsecutiveZeros(x, y+1);
-                openConsecutiveZeros(x, y-1);
-                openConsecutiveZeros(x+1, y);
-                openConsecutiveZeros(x+1, y-1);
-                openConsecutiveZeros(x+1, y+1);
-                openConsecutiveZeros(x-1, y);
-                openConsecutiveZeros(x-1, y+1);
-                openConsecutiveZeros(x-1, y-1);
+    public void initialiseCheckedArrayList(){
+        for(boolean[] bools : buttonsChecked){
+            for(boolean bool : bools){
+                bool = false;
             }
         }
+    }
+     private void openConsecutiveZeros(int x, int y){
+         boolean isWithInBounds =(x<solutions.length && x>=0) && (y<solutions[0].length && y>=0);
+         if(isWithInBounds ) {
+             boolean isEmpty = solutions[x][y] == 0;
+             boolean Checked = false;
+             Checked = buttonsChecked[x][y];
+
+             if (isEmpty) {
+                 buttons[x][y].setText("0");
+                 buttonsChecked[x][y] = true;
+                 if(!Checked){
+                     openConsecutiveZeros(x,y+1);
+                     openConsecutiveZeros(x,y-1);
+                     openConsecutiveZeros(x+1, y);
+                     openConsecutiveZeros(x-1,y);
+                 }
+             }
+         }
      }
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
