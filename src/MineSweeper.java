@@ -32,7 +32,7 @@ public class MineSweeper implements ActionListener {
     public MineSweeper(int gridSize, int bombs){
 
         try {
-            UIManager.setLookAndFeel(new NimbusLookAndFeel());
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (Exception ex) {
             System.out.println("Can't set the look and feel.");
         }
