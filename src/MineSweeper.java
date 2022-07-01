@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
+
 public class MineSweeper implements ActionListener {
     JFrame frame;
     JPanel textPanel;
@@ -30,8 +31,8 @@ public class MineSweeper implements ActionListener {
             System.out.println("Can't set the look and feel.");
         }
 
-        gridSize = 5;
-        bombs = 5;
+        gridSize = 10;
+        bombs = 9;
         xBombPositions = new ArrayList<>();
         yBombPositions = new ArrayList<>();
 
@@ -154,10 +155,14 @@ public class MineSweeper implements ActionListener {
      }
 
      public void check(int x, int y){
+         boolean isEmpty = (solutions[x][y] == 0);
+         System.out.println("Is empty: "+ isEmpty);
         gameOver = (solutions[x][y] == gridSize +1);
         if(!gameOver){
             buttons[x][y].setText(String.valueOf(solutions[x][y]));
             checkWinner();
+            if(isEmpty)
+                openConsecutiveZeros(x,y);
         }
         else {
             gameOver(false);
@@ -211,7 +216,29 @@ public class MineSweeper implements ActionListener {
              System.out.println();
          }
      }
+     int recursiveCall = 0;
+     private void openConsecutiveZeros(int x, int y){
+         System.out.println("In recursive: ");
+         if(x<solutions.length && y<solutions[0].length){
+             boolean isBomb = (solutions[x][y] == gridSize + 1);
+             boolean isEmpty = (solutions[x][y] == 0);
 
+             if(isEmpty){
+                 buttons[x][y].setText(String.valueOf(solutions[x][y]));
+                 if (!isBomb) {
+                     openConsecutiveZeros(x + 1, y);
+                     openConsecutiveZeros(x - 1, y);
+                     openConsecutiveZeros(x, y + 1);
+                     openConsecutiveZeros(x, y - 1);
+                     openConsecutiveZeros(x + 1, y + 1);
+                     openConsecutiveZeros(x + 1, y - 1);
+                     openConsecutiveZeros(x - 1, y + 1);
+                     openConsecutiveZeros(x - 1, y - 1);
+                 }
+             }
+         }
+
+     }
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         JButton jb = (JButton) actionEvent.getSource();
