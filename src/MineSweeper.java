@@ -162,7 +162,6 @@ public class MineSweeper implements ActionListener {
         else {
             gameOver(false);
         }
-
      }
      public void checkWinner(){
         int buttonsLeft = 0;
@@ -173,8 +172,8 @@ public class MineSweeper implements ActionListener {
                  }
              }
          }
-            boolean won = (buttonsLeft == bombs);
-            gameOver(won);
+            if((buttonsLeft == bombs))
+                gameOver(true);
      }
      public void gameOver(boolean won){
         if(!won) {
@@ -193,12 +192,15 @@ public class MineSweeper implements ActionListener {
         else{
             textField.setForeground(Color.green);
             textField.setText("You won!");
-            for(JButton[] jbs: buttons){
-                for(JButton jb: jbs){
-                    jb.setEnabled(false);
-                }
-            }
+            disableButtons();
         }
+     }
+     public void disableButtons(){
+         for(JButton[] jbs: buttons){
+             for(JButton jb: jbs){
+                 jb.setEnabled(false);
+             }
+         }
      }
 
      public void displayBombMap(){
