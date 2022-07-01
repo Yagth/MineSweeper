@@ -213,8 +213,9 @@ public class MineSweeper implements ActionListener {
                     if (isBomb){
                         buttons[i][j].setIcon(bombImage);
                     }
-                    if(!isEmpty && !isBomb)  buttons[i][j].setText(String.valueOf(solutions[i][j]));
+                    if(!isEmpty && !isBomb) buttons[i][j].setText(String.valueOf(solutions[i][j]));
                     buttons[i][j].setEnabled(false);
+
                 }
             }
         }
