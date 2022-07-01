@@ -197,7 +197,9 @@ public class MineSweeper implements ActionListener {
                     boolean isBomb = (solutions[i][j] == gridSize + 1);
                     if (isBomb)
                         buttons[i][j].setForeground(Color.red);
-                    buttons[i][j].setText(String.valueOf(solutions[i][j]));
+                    if(solutions[i][j] != 0){
+                        buttons[i][j].setText(String.valueOf(solutions[i][j]));
+                    }
                     buttons[i][j].setEnabled(false);
                 }
             }
