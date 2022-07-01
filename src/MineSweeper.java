@@ -168,6 +168,7 @@ public class MineSweeper implements ActionListener {
             checkWinner();
             if(isEmpty)
                 openConsecutiveZeros(x,y);
+            openZeroNeighbours();
         }
         else {
             gameOver(false);
@@ -232,11 +233,10 @@ public class MineSweeper implements ActionListener {
          boolean isWithInBounds =(x<solutions.length && x>=0) && (y<solutions[0].length && y>=0);
          if(isWithInBounds ) {
              boolean isEmpty = solutions[x][y] == 0;
-             boolean Checked = false;
-             Checked = buttonsChecked[x][y];
+             boolean Checked = buttonsChecked[x][y];
 
              if (isEmpty) {
-                 buttons[x][y].setText("0");
+                 buttons[x][y].setEnabled(false);
                  buttonsChecked[x][y] = true;
                  if(!Checked){
                      openConsecutiveZeros(x,y+1);
@@ -247,6 +247,32 @@ public class MineSweeper implements ActionListener {
              }
          }
      }
+
+     public void checkForBombs(int x, int y){
+         System.out.println("In checkForBombs recursive...");
+        boolean isBomb = (solutions[x][y] == gridSize +1);
+         if(!isBomb&&(!buttonsChecked[x][y])){
+             buttons[x][y].setText(String.valueOf(solutions[x][y]));
+             buttonsChecked[x][y] = true;
+             checkForBombs(x+1,y);
+             checkForBombs(x-1,y);
+             checkForBombs(x,y+1);
+             checkForBombs(x,y-1);
+         }
+     }
+
+     public void openZeroNeighbours(){
+         System.out.println("In openZeroNeighbours...");
+        for(int i = 0; i<solutions.length; i++){
+            for(int j = 0; j<solutions[0].length; j++){
+                if(!(buttons[i][j].isEnabled())){
+                    initialiseCheckedArrayList();
+                    checkForBombs(i,j);
+                }
+            }
+        }
+     }
+
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         JButton jb = (JButton) actionEvent.getSource();
