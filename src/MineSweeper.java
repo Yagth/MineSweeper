@@ -97,8 +97,6 @@ public class MineSweeper implements ActionListener {
 
         bombImage = new ImageIcon(tmpBombImage);
         explosionImage = new ImageIcon(tmpExplosionImage);
-
-        this.displayBombMap();
     }
 
     private void createBombs(){
