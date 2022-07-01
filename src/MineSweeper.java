@@ -7,10 +7,13 @@ import java.util.*;
 
 public class MineSweeper implements ActionListener {
     JFrame frame;
+    JFrame newFrame;
     JPanel textPanel;
+    JPanel newButtonsPanel;
     JPanel buttonPanel;
     JButton[][] buttons;
     int[][] solutions;
+    JButton newButton;
     boolean[][] buttonsChecked;
     JLabel textField;
 
@@ -20,13 +23,13 @@ public class MineSweeper implements ActionListener {
 
     int gridSize;
     int bombs;
-    final int WIDTH = 570;
-    final int HEIGHT = 570;
+    final int WIDTH = 820;
+    final int HEIGHT = 820;
     boolean gameOver;
 
     ArrayList<Integer> xBombPositions;
     ArrayList<Integer> yBombPositions;
-    public MineSweeper(){
+    public MineSweeper(int gridSize, int bombs){
 
         try {
             UIManager.setLookAndFeel(new NimbusLookAndFeel());
@@ -34,8 +37,8 @@ public class MineSweeper implements ActionListener {
             System.out.println("Can't set the look and feel.");
         }
 
-        gridSize = 10;
-        bombs = 9;
+        this.gridSize = gridSize;
+        this.bombs = bombs;
         xBombPositions = new ArrayList<>();
         yBombPositions = new ArrayList<>();
 
@@ -54,6 +57,10 @@ public class MineSweeper implements ActionListener {
         buttonPanel.setLayout(new GridLayout(gridSize,gridSize));
         buttonPanel.setVisible(true);
 
+        newButtonsPanel = new JPanel();
+        newButtonsPanel.setVisible(true);
+        newButtonsPanel.setBackground(Color.black);
+
         textField = new JLabel();
         textField.setHorizontalAlignment(JLabel.CENTER);
         textField.setFont(new Font("MV Boil",Font.BOLD,20));
@@ -62,6 +69,8 @@ public class MineSweeper implements ActionListener {
 
         buttons = new JButton[gridSize][gridSize];
         solutions = new int[gridSize][gridSize];
+        newButton = new JButton("New");
+        newButton.addActionListener(new NewButtonListener());
 
         this.createButtons();
         this.getSolution();
@@ -70,9 +79,11 @@ public class MineSweeper implements ActionListener {
         this.initialiseCheckedArrayList();
 
         textPanel.add(textField);
+        newButtonsPanel.add(newButton);
         frame.setTitle("Mine Sweeper!");
         frame.add(textPanel,BorderLayout.NORTH);
         frame.add(buttonPanel,BorderLayout.CENTER);
+        frame.add(newButton,BorderLayout.SOUTH);
         frame.setSize(WIDTH,HEIGHT);
         frame.revalidate();
         frame.setLocationRelativeTo(null);
@@ -319,6 +330,111 @@ public class MineSweeper implements ActionListener {
                     gameLogic(i,j);
                     buttons[i][j].setEnabled(false);
                 }
+            }
+        }
+    }
+    private class NewButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            newFrame = new JFrame("Choose Size and Difficulty");
+            newFrame.setSize(100, 100);
+            newFrame.setLocationRelativeTo(MineSweeper.this.frame);
+            newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            newFrame.setResizable(false);
+            JPanel panel = new JPanel();
+            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+            JLabel label = new JLabel("Size");
+            label.setOpaque(true);
+            label.setBackground(Color.gray);
+            label.setForeground(Color.white);
+            label.setVisible(true);
+
+            JRadioButton radioButton1 = new JRadioButton("8 X 8");
+            JRadioButton radioButton2 = new JRadioButton("16 X 16");
+
+            radioButton1.addActionListener(new RadioButton1Listener());
+            radioButton2.addActionListener(new RadioButton2Listener());
+
+            JButton next = new JButton("Next");
+            next.addActionListener(new NextButtonListener());
+            next.setPreferredSize(new Dimension(20, 10));
+
+            ButtonGroup group = new ButtonGroup();
+            group.add(radioButton1);
+            group.add(radioButton2);
+
+            JRadioButton radioButton4 = new JRadioButton("Easy: 10 Mines");
+            JRadioButton radioButton5 = new JRadioButton("Medium: 20 Mines");
+            JRadioButton radioButton6 = new JRadioButton("Hard: 50 Mines");
+
+            radioButton4.addActionListener(new RadioButton4Listener());
+            radioButton5.addActionListener(new RadioButton5Listener());
+            radioButton6.addActionListener(new RadioButton6Listener());
+
+            ButtonGroup group2 = new ButtonGroup();
+            group2.add(radioButton4);
+            group2.add(radioButton5);
+            group2.add(radioButton6);
+
+            JLabel label1 = new JLabel("Select Difficulty: ");
+            label1.setOpaque(true);
+            label1.setBackground(Color.gray);
+            label1.setForeground(Color.white);
+            label1.setVisible(true);
+
+            panel.add(label);
+            panel.add(radioButton1);
+            panel.add(radioButton2);
+            panel.add(label1);
+            panel.add(radioButton4);
+            panel.add(radioButton5);
+            panel.add(radioButton6);
+            panel.add(next);
+            panel.setVisible(true);
+            newFrame.add(panel, BorderLayout.CENTER);
+            newFrame.pack();
+            newFrame.setVisible(true);
+        }
+        private class RadioButton1Listener implements ActionListener{
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                gridSize = 8;
+            }
+        }
+        private class RadioButton2Listener implements ActionListener{
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                gridSize = 16;
+
+            }
+        }
+        private class RadioButton4Listener implements ActionListener{
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                bombs = 10;
+
+            }
+        }
+        private class RadioButton5Listener implements ActionListener{
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                bombs = 20;
+
+            }
+        }
+        private class RadioButton6Listener implements ActionListener{
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                bombs = 50;
+            }
+        }
+        private class NextButtonListener implements ActionListener {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                MineSweeper.this.newFrame.dispose();
+                MineSweeper.this.frame.dispose();
+                new MineSweeper(MineSweeper.this.gridSize,MineSweeper.this.bombs);
             }
         }
     }

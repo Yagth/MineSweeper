@@ -1,5 +1,5 @@
 public class Main {
     public static void main(String[] args) {
-        new MineSweeper();
+        new MineSweeper(8,10);
     }
 }
