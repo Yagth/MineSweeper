@@ -218,26 +218,20 @@ public class MineSweeper implements ActionListener {
      }
      int recursiveCall = 0;
      private void openConsecutiveZeros(int x, int y){
-         System.out.println("In recursive: ");
-         if(x<solutions.length && y<solutions[0].length){
-             boolean isBomb = (solutions[x][y] == gridSize + 1);
-             boolean isEmpty = (solutions[x][y] == 0);
-
-             if(isEmpty){
-                 buttons[x][y].setText(String.valueOf(solutions[x][y]));
-                 if (!isBomb) {
-                     openConsecutiveZeros(x + 1, y);
-                     openConsecutiveZeros(x - 1, y);
-                     openConsecutiveZeros(x, y + 1);
-                     openConsecutiveZeros(x, y - 1);
-                     openConsecutiveZeros(x + 1, y + 1);
-                     openConsecutiveZeros(x + 1, y - 1);
-                     openConsecutiveZeros(x - 1, y + 1);
-                     openConsecutiveZeros(x - 1, y - 1);
-                 }
-             }
-         }
-
+         boolean isWithInBounds =(x<solutions.length && x>=0) && (y<solutions[0].length && y>=0);
+        if(isWithInBounds){
+            if(solutions[x][y] == 0){
+                buttons[x][y].setText(String.valueOf(solutions[x][y]));
+                openConsecutiveZeros(x, y+1);
+                openConsecutiveZeros(x, y-1);
+                openConsecutiveZeros(x+1, y);
+                openConsecutiveZeros(x+1, y-1);
+                openConsecutiveZeros(x+1, y+1);
+                openConsecutiveZeros(x-1, y);
+                openConsecutiveZeros(x-1, y+1);
+                openConsecutiveZeros(x-1, y-1);
+            }
+        }
      }
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
