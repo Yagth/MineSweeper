@@ -15,6 +15,8 @@ public class MineSweeper implements ActionListener {
     JLabel textField;
 
     Random random;
+    ImageIcon bombImage;
+    ImageIcon explosionImage;
 
     int gridSize;
     int bombs;
@@ -74,6 +76,16 @@ public class MineSweeper implements ActionListener {
         frame.setSize(WIDTH,HEIGHT);
         frame.revalidate();
         frame.setLocationRelativeTo(null);
+
+        Dimension dimension = buttons[0][0].getPreferredSize();
+
+        Image tmpBombImage = new ImageIcon("Images/mineBomb.png").getImage();
+        tmpBombImage = tmpBombImage.getScaledInstance(dimension.width*2,dimension.height*4,Image.SCALE_AREA_AVERAGING);
+        Image tmpExplosionImage = new ImageIcon("Images/explosion.png").getImage();
+        tmpExplosionImage = tmpExplosionImage.getScaledInstance(dimension.width*2,dimension.height*4,Image.SCALE_AREA_AVERAGING);
+
+        bombImage = new ImageIcon(tmpBombImage);
+        explosionImage = new ImageIcon(tmpExplosionImage);
 
         this.displayBombMap();
     }
@@ -158,13 +170,14 @@ public class MineSweeper implements ActionListener {
          }
      }
 
-     public void check(int x, int y){
+     public void gameLogic(int x, int y){
          initialiseCheckedArrayList();
          boolean isEmpty = (solutions[x][y] == 0);
          gameOver = (solutions[x][y] == gridSize +1);
 
         if(!gameOver){
-            if(solutions[x][y] !=0 ) {
+            boolean isBomb = solutions[x][y] == gridSize+1;
+            if(!isEmpty && !isBomb ) {
                 buttons[x][y].setText(String.valueOf(solutions[x][y]));
             }
             checkWinner();
@@ -174,6 +187,7 @@ public class MineSweeper implements ActionListener {
         }
         else {
             gameOver(false);
+            buttons[x][y].setIcon(explosionImage);
         }
      }
      public void checkWinner(){
@@ -195,11 +209,11 @@ public class MineSweeper implements ActionListener {
             for (int i = 0; i < buttons.length; i++) {
                 for (int j = 0; j < buttons[0].length; j++) {
                     boolean isBomb = (solutions[i][j] == gridSize + 1);
-                    if (isBomb)
-                        buttons[i][j].setForeground(Color.red);
-                    if(solutions[i][j] != 0){
-                        buttons[i][j].setText(String.valueOf(solutions[i][j]));
+                    boolean isEmpty = (solutions[i][j] == 0);
+                    if (isBomb){
+                        buttons[i][j].setIcon(bombImage);
                     }
+                    if(!isEmpty && !isBomb)  buttons[i][j].setText(String.valueOf(solutions[i][j]));
                     buttons[i][j].setEnabled(false);
                 }
             }
@@ -301,7 +315,7 @@ public class MineSweeper implements ActionListener {
         for(int i = 0; i<gridSize; i++){
             for(int j = 0; j<gridSize; j++){
                 if(buttons[i][j].equals(jb)){
-                    check(i,j);
+                    gameLogic(i,j);
                     buttons[i][j].setEnabled(false);
                 }
             }
