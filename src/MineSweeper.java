@@ -164,7 +164,9 @@ public class MineSweeper implements ActionListener {
          gameOver = (solutions[x][y] == gridSize +1);
 
         if(!gameOver){
-            buttons[x][y].setText(String.valueOf(solutions[x][y]));
+            if(solutions[x][y] !=0 ) {
+                buttons[x][y].setText(String.valueOf(solutions[x][y]));
+            }
             checkWinner();
             if(isEmpty)
                 openConsecutiveZeros(x,y);
@@ -248,26 +250,44 @@ public class MineSweeper implements ActionListener {
          }
      }
 
-     public void checkForBombs(int x, int y){
-         System.out.println("In checkForBombs recursive...");
-        boolean isBomb = (solutions[x][y] == gridSize +1);
-         if(!isBomb&&(!buttonsChecked[x][y])){
-             buttons[x][y].setText(String.valueOf(solutions[x][y]));
-             buttonsChecked[x][y] = true;
-             checkForBombs(x+1,y);
-             checkForBombs(x-1,y);
-             checkForBombs(x,y+1);
-             checkForBombs(x,y-1);
-         }
-     }
-
      public void openZeroNeighbours(){
-         System.out.println("In openZeroNeighbours...");
         for(int i = 0; i<solutions.length; i++){
             for(int j = 0; j<solutions[0].length; j++){
-                if(!(buttons[i][j].isEnabled())){
-                    initialiseCheckedArrayList();
-                    checkForBombs(i,j);
+                if((buttons[i][j].getText().equals("")&&!(buttons[i][j].isEnabled()))){
+                    try{
+                        if((solutions[i][j+1] != (gridSize +1)&&(solutions[i][j+1] != 0))){
+                            buttons[i][j+1].setText(String.valueOf(solutions[i][j+1]));
+                            buttons[i][j+1].setEnabled(false);
+                        }
+                        if(solutions[i][j-1] != (gridSize +1)&&(solutions[i][j-1] != 0)){
+                            buttons[i][j-1].setText(String.valueOf(solutions[i][j-1]));
+                            buttons[i][j-1].setEnabled(false);
+                        }
+                        if(solutions[i+1][j] != (gridSize +1)&&(solutions[i+1][j] != 0)){
+                            buttons[i+1][j].setText(String.valueOf(solutions[i+1][j]));
+                            buttons[i+1][j].setEnabled(false);
+                        }
+                        if(solutions[i-1][j] != (gridSize +1)&&(solutions[i-1][j] != 0)){
+                            buttons[i-1][j].setText(String.valueOf(solutions[i-1][j]));
+                            buttons[i-1][j].setEnabled(false);
+                        }
+                        if(solutions[i+1][j+1] != (gridSize +1)&&(solutions[i+1][j+1] != 0)){
+                            buttons[i+1][j+1].setText(String.valueOf(solutions[i+1][j+1]));
+                            buttons[i+1][j+1].setEnabled(false);
+                        }
+                        if(solutions[i-1][j+1] != (gridSize +1)&&(solutions[i-1][j+1] != 0)){
+                            buttons[i-1][j+1].setText(String.valueOf(solutions[i-1][j+1]));
+                            buttons[i-1][j+1].setEnabled(false);
+                        }
+                        if(solutions[i-1][j-1] != (gridSize +1)&&(solutions[i-1][j-1] != 0)){
+                            buttons[i-1][j-1].setText(String.valueOf(solutions[i-1][j-1]));
+                            buttons[i-1][j-1].setEnabled(false);
+                        }
+                        if(solutions[i+1][j-1] != (gridSize +1)&&(solutions[i+1][j-1] != 0)){
+                            buttons[i+1][j-1].setText(String.valueOf(solutions[i+1][j-1]));
+                            buttons[i+1][j-1].setEnabled(false);
+                        }
+                    } catch (Exception ex){}
                 }
             }
         }
@@ -278,8 +298,10 @@ public class MineSweeper implements ActionListener {
         JButton jb = (JButton) actionEvent.getSource();
         for(int i = 0; i<gridSize; i++){
             for(int j = 0; j<gridSize; j++){
-                if(buttons[i][j].equals(jb))
+                if(buttons[i][j].equals(jb)){
                     check(i,j);
+                    buttons[i][j].setEnabled(false);
+                }
             }
         }
     }
