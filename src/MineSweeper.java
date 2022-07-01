@@ -205,7 +205,7 @@ public class MineSweeper implements ActionListener {
         int buttonsLeft = 0;
          for (JButton[] button : buttons) {
              for (int j = 0; j < buttons[0].length; j++) {
-                 if (button[j].getText().equals("")) {
+                 if (button[j].getText().equals("")&&(button[j].isEnabled())) {
                      buttonsLeft++;
                  }
              }
@@ -226,7 +226,6 @@ public class MineSweeper implements ActionListener {
                     }
                     if(!isEmpty && !isBomb) buttons[i][j].setText(String.valueOf(solutions[i][j]));
                     buttons[i][j].setEnabled(false);
-
                 }
             }
         }
@@ -337,7 +336,7 @@ public class MineSweeper implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent actionEvent) {
             newFrame = new JFrame("Choose Size and Difficulty");
-            newFrame.setSize(100, 100);
+            newFrame.setSize(300, 190);
             newFrame.setLocationRelativeTo(MineSweeper.this.frame);
             newFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             newFrame.setResizable(false);
@@ -358,7 +357,7 @@ public class MineSweeper implements ActionListener {
 
             JButton next = new JButton("Next");
             next.addActionListener(new NextButtonListener());
-            next.setPreferredSize(new Dimension(20, 10));
+            next.setPreferredSize(new Dimension(20, 25));
 
             ButtonGroup group = new ButtonGroup();
             group.add(radioButton1);
@@ -393,7 +392,6 @@ public class MineSweeper implements ActionListener {
             panel.add(next);
             panel.setVisible(true);
             newFrame.add(panel, BorderLayout.CENTER);
-            newFrame.pack();
             newFrame.setVisible(true);
         }
         private class RadioButton1Listener implements ActionListener{
